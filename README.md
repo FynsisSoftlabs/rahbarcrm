@@ -88,18 +88,6 @@ cp .env.example .env
 
 Full step-by-step instructions, including both installation methods and post-install configuration, are available in **install.md**.
 
-## Quick Start (CLI Installer)
-
-```bash
-./bin/console suitecrm:app:install \
--u "admin" \
--p "your_admin_password" \
--U "db_user" \
--P "db_password"
-```
-
-See **install.md** for the complete installation guide and all available CLI parameters.
-
 ### Option 3: Download on your local and install
 
 1. Download the pre-built installable package for your release.
