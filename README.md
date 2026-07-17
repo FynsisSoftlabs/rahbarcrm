@@ -42,7 +42,65 @@ See [`install.md`](./install.md) for the full list of required PHP modules and s
 
 Full prerequisite details are in [`install.md`](./install.md).
 
-### Installation
+## Installation
+
+### Option 1: Install from GitHub Release (Recommended)
+
+1. Download the latest pre-built installable package from the **Releases** page.
+2. Upload the package to your web server's document root.
+3. Extract the package and set the required file permissions.
+4. Run the installer using either the browser-based installer or the CLI installer.
+5. Configure the required cron job and messenger worker for scheduled and background tasks.
+
+### Option 2: Install Directly from GitHub
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/fynsis/rahbarcrm.git
+```
+
+2. Navigate to the project directory:
+
+```bash
+cd rahbarcrm
+```
+
+3. Install PHP dependencies:
+
+```bash
+composer install --no-dev --optimize-autoloader
+```
+
+4. Create the environment configuration:
+
+```bash
+cp .env.example .env
+```
+
+5. Open the `.env` file and configure your database credentials and application settings.
+
+6. Set the required file and directory permissions.
+
+7. Run the installer using either the browser-based installer or the CLI installer.
+
+8. Configure the required cron job and messenger worker for scheduled and background tasks.
+
+Full step-by-step instructions, including both installation methods and post-install configuration, are available in **install.md**.
+
+## Quick Start (CLI Installer)
+
+```bash
+./bin/console suitecrm:app:install \
+-u "admin" \
+-p "your_admin_password" \
+-U "db_user" \
+-P "db_password"
+```
+
+See **install.md** for the complete installation guide and all available CLI parameters.
+
+### Option 3: Download on your local and install
 
 1. Download the pre-built installable package for your release.
 2. Copy it to your webserver's web root and set file permissions.
