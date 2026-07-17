@@ -2,7 +2,7 @@
 
 *A complete guide to downloading, configuring, and installing RahbarCRM*
 
-**Version:** 1.0 | **Date:** July 10, 2026 | **Prepared for:** End Users / Self-Hosters
+**Version:** 1.1 | **Date:** July 17, 2026 | **Prepared for:** End Users / Self-Hosters
 
 ---
 
@@ -13,6 +13,8 @@
 3. [Prerequisites](#3-prerequisites)
 4. [System Requirements: Webserver Setup](#4-system-requirements-webserver-setup)
 5. [Downloading and Setting Up RahbarCRM](#5-downloading-and-setting-up-rahbarcrm)
+   - [5.1 Option 1: Pre-Built Installable Package](#51-option-1-pre-built-installable-package)
+   - [5.2 Option 2: Installing from Source via GitHub](#52-option-2-installing-from-source-via-github)
 6. [Installation Steps](#6-installation-steps)
    - [6.1 Option A — UI Installer](#61-option-a--ui-installer)
    - [6.2 Option B — CLI Installer](#62-option-b--cli-installer)
@@ -38,6 +40,7 @@ This guide assumes you are comfortable with:
 - Basic Linux/Unix server administration (navigating a filesystem, editing config files, using a terminal).
 - Running shell commands, including file permission changes.
 - Basic webserver and database concepts (virtual hosts, database users, ports).
+- If installing from source: basic familiarity with `git`, PHP dependency management (Composer), and Node-based front-end builds.
 
 No prior experience with RahbarCRM itself is required — every step below is self-contained.
 
@@ -65,15 +68,17 @@ Before you begin, provision a server (or local environment) that meets the follo
 | Edge | 143+ |
 | Safari | 26+ |
 
-### 3.3 Front-End Build Tools (Development Only)
+### 3.3 Front-End Build Tools
 
-Only required if you are building RahbarCRM from source for a development environment. Not required when installing the pre-built package.
+Required only if you are installing **from source via GitHub** (see [Section 5.2](#52-option-2-installing-from-source-via-github)). Not required when installing the pre-built package.
 
 | Tool | Version |
 |---|---|
 | Angular CLI | ^18 |
 | Node.js | ^20.11.1 |
 | yarn | ^4.10.3 |
+| Composer | 2.x |
+| Git | Any recent version |
 
 ### 3.4 Required PHP Modules
 
@@ -105,7 +110,7 @@ This guide uses a LAMP stack (Linux, Apache, MySQL/MariaDB, PHP) as the referenc
 - **PHP** (see version table above)
 - A database — **MySQL** or **MariaDB**
 
-> When installing from the pre-built installable package, you do **not** need Node.js, Angular CLI, or yarn — the package already includes compiled front-end assets and vendor libraries.
+> When installing from the pre-built installable package, you do **not** need Node.js, Angular CLI, yarn, Composer, or Git — the package already includes compiled front-end assets and vendor libraries. These are only needed for the GitHub source install path in [Section 5.2](#52-option-2-installing-from-source-via-github).
 
 ### 4.2 Configure URL Rewrites
 
@@ -138,118 +143,73 @@ error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE & ~E_WARNING
 
 ## 5. Downloading and Setting Up RahbarCRM
 
-RahbarCRM can be installed using one of the following methods:
+You can set up RahbarCRM in one of two ways: installing the **pre-built package** (simplest, recommended for most self-hosters) or **building from source via GitHub** (for development environments, custom builds, or contributors).
 
-- **Option A:** Download the latest release package (Recommended for Production)
-- **Option B:** Clone the latest source code from GitHub (Recommended for Developers)
-- **Option C:** Downloaded file in your local server/instance (Recommended for Developers)
+### 5.1 Option 1: Pre-Built Installable Package
 
----
+#### 5.1.1 Download the Installable Package
 
-## 5.1 Option A — Download Release Package
+Download the pre-built installable package for your target release.
 
-Download the latest pre-built release package from the RahbarCRM GitHub Releases page.
+#### 5.1.2 Copy Files to the Webserver Root
 
-The release package already contains all compiled frontend assets and production dependencies, making it the recommended installation method for production environments.
+1. Unzip the pre-built installable package.
+2. Copy the extracted files to your webserver's web root (for Apache, typically `/var/www` or `/var/www/html` — make sure this matches the `DocumentRoot` from [Section 4.2](#42-configure-url-rewrites)).
 
-After downloading:
+Skip ahead to [Section 5.3](#53-set-file-permissions) once files are in place.
 
-1. Upload the package to your web server.
-2. Extract the archive.
-3. Continue with the installation steps below.
+### 5.2 Option 2: Installing from Source via GitHub
 
----
+Use this path if you want to build RahbarCRM yourself — for example, to track the latest development branch, apply custom patches, or contribute back to the project.
 
-## 5.2 Option B — Clone from GitHub
-
-If you want the latest development version or intend to contribute to RahbarCRM, clone the repository directly from GitHub.
-
-### Clone the Repository
+#### 5.2.1 Clone the Repository
 
 ```bash
-git clone https://github.com/fynsis/rahbarcrm.git
-```
-
-Move into the project directory.
-
-```bash
+git clone https://github.com/FynsisSoftlabs/rahbarcrm.git
 cd rahbarcrm
 ```
 
-### Install PHP Dependencies
+To install a specific tagged release instead of the latest commit on the default branch, check out the corresponding tag after cloning:
+
+```bash
+git tag -l                 # list available release tags
+git checkout tags/<version-tag>
+```
+
+#### 5.2.2 Install PHP Dependencies
+
+From the project root, install backend dependencies with Composer:
 
 ```bash
 composer install --no-dev --optimize-autoloader
 ```
 
-If you are installing a development version, omit the `--no-dev` option.
+Omit `--no-dev` if you are setting up a development environment and want dev-only tooling installed as well.
 
-### Install Frontend Dependencies (Development Only)
+#### 5.2.3 Install Front-End Dependencies and Build
 
-Production installations can skip this section.
+Install Node dependencies with yarn and produce a production build of the front end:
 
 ```bash
 yarn install
-```
-
-Compile frontend assets.
-
-```bash
 yarn build
 ```
 
-Or for active development:
+This compiles the Angular front end into the application's `public` directory. If your checkout uses a different build script name, check the `scripts` section of `package.json` in the repository, or the project's `CONTRIBUTING.md`, for the exact command.
+
+#### 5.2.4 Move Files to the Webserver Root
+
+Copy (or symlink) the cloned and built project directory into your webserver's web root, matching the `DocumentRoot` configured in [Section 4.2](#42-configure-url-rewrites).
 
 ```bash
-yarn start
+cp -r rahbarcrm/. /var/www/html/rahbarcrm/
 ```
 
-### Create Environment Configuration
-
-```bash
-cp .env.example .env
-```
-
-Edit the `.env` file and configure:
-
-- Database host
-- Database name
-- Database username
-- Database password
-- Application URL
-- Mail settings (optional)
-
-### Set File Permissions
-
-Run the following commands:
-
-```bash
-find . -type d -not -perm 2755 -exec chmod 2755 {} \;
-find . -type f -not -perm 0644 -exec chmod 0644 {} \;
-find . ! -user www-data -exec chown www-data:www-data {} \;
-chmod +x bin/console
-```
-
-Replace `www-data` with the user that your web server runs as.
-
-### Create the Database
-
-Create an empty MySQL or MariaDB database before running the installer.
-
-After completing these steps, continue with **Section 6 – Installation Steps**.
-
-## 5.3 Option C — Download the Installable Package
-
-Unless you are building a development environment from source, download the pre-built installable package for your target release.
-
-### 5.2 Copy Files to the Webserver Root
-
-1. Unzip the pre-built installable package.
-2. Copy the extracted files to your webserver's web root (for Apache, typically `/var/www` or `/var/www/html` — make sure this matches the `DocumentRoot` from [Section 4.2](#42-configure-url-rewrites)).
+> **Note:** Commands in this section reflect the standard PHP/Composer + Node/yarn build pattern used by this stack. If the repository's own README or CONTRIBUTING guide specifies different build steps, follow those instead — they take precedence over this guide for anything specific to a given release.
 
 ### 5.3 Set File Permissions
 
-From the terminal, run:
+From the terminal, run (regardless of which installation option you used):
 
 ```bash
 find . -type d -not -perm 2755 -exec chmod 2755 {} \;
@@ -268,7 +228,7 @@ Depending on your setup, you may need to create the target database yourself bef
 
 ## 6. Installation Steps
 
-You can install RahbarCRM using either the UI installer (browser-based) or the CLI installer (command line).
+You can install RahbarCRM using either the UI installer (browser-based) or the CLI installer (command line). This applies the same way whether you installed the pre-built package or built from source.
 
 ### 6.1 Option A — UI Installer
 
@@ -398,7 +358,7 @@ Background tasks (e.g. manual migration tasks) are processed by a queue worker. 
 - [ ] Required PHP modules installed
 - [ ] Apache `mod_rewrite` enabled; vhost points to the `public` directory
 - [ ] PHP `error_reporting` configured
-- [ ] Package downloaded and extracted to the webroot
+- [ ] Package downloaded (or repository cloned and built) and placed in the webroot
 - [ ] File permissions and ownership set correctly
 - [ ] Database created (if required)
 - [ ] Installer completed (UI or CLI) with correct database and site URL values
@@ -419,6 +379,8 @@ Background tasks (e.g. manual migration tasks) are processed by a queue worker. 
 | Scheduled tasks never run | Cron job not configured | Add the scheduler cron entry per [Section 8.1](#81-cron-job-scheduled-tasks) |
 | Background tasks stuck on "Pending" | Messenger worker not running | Start and persist the queue worker per [Section 8.2](#82-messenger-worker-async-tasks) |
 | Install halts on a required check | A mandatory system requirement failed | Resolve the specific requirement shown, then click RECHECK |
+| `composer install` fails on PHP version | Local PHP version doesn't match `composer.json` constraints | Confirm your PHP version against [Section 3.1](#31-platform) and switch versions if needed |
+| Front-end build fails or produces no assets in `public` | Node/yarn version mismatch, or `yarn build` not run | Confirm Node/yarn versions match [Section 3.3](#33-front-end-build-tools), then re-run `yarn install && yarn build` |
 
 ---
 
@@ -429,3 +391,4 @@ Background tasks (e.g. manual migration tasks) are processed by a queue worker. 
 - **Website:** [rahbarcrm.com](https://rahbarcrm.com)
 - **Support:** [support@fynsis.com](mailto:support@fynsis.com)
 - **Implementation & Sales:** [sales@fynsis.com](mailto:sales@fynsis.com)
+- **Source:** [github.com/FynsisSoftlabs/rahbarcrm](https://github.com/FynsisSoftlabs/rahbarcrm)
