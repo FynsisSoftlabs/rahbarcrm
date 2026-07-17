@@ -138,7 +138,107 @@ error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE & ~E_WARNING
 
 ## 5. Downloading and Setting Up RahbarCRM
 
-### 5.1 Download the Installable Package
+RahbarCRM can be installed using one of the following methods:
+
+- **Option A:** Download the latest release package (Recommended for Production)
+- **Option B:** Clone the latest source code from GitHub (Recommended for Developers)
+- **Option C:** Downloaded file in your local server/instance (Recommended for Developers)
+
+---
+
+## 5.1 Option A — Download Release Package
+
+Download the latest pre-built release package from the RahbarCRM GitHub Releases page.
+
+The release package already contains all compiled frontend assets and production dependencies, making it the recommended installation method for production environments.
+
+After downloading:
+
+1. Upload the package to your web server.
+2. Extract the archive.
+3. Continue with the installation steps below.
+
+---
+
+## 5.2 Option B — Clone from GitHub
+
+If you want the latest development version or intend to contribute to RahbarCRM, clone the repository directly from GitHub.
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/fynsis/rahbarcrm.git
+```
+
+Move into the project directory.
+
+```bash
+cd rahbarcrm
+```
+
+### Install PHP Dependencies
+
+```bash
+composer install --no-dev --optimize-autoloader
+```
+
+If you are installing a development version, omit the `--no-dev` option.
+
+### Install Frontend Dependencies (Development Only)
+
+Production installations can skip this section.
+
+```bash
+yarn install
+```
+
+Compile frontend assets.
+
+```bash
+yarn build
+```
+
+Or for active development:
+
+```bash
+yarn start
+```
+
+### Create Environment Configuration
+
+```bash
+cp .env.example .env
+```
+
+Edit the `.env` file and configure:
+
+- Database host
+- Database name
+- Database username
+- Database password
+- Application URL
+- Mail settings (optional)
+
+### Set File Permissions
+
+Run the following commands:
+
+```bash
+find . -type d -not -perm 2755 -exec chmod 2755 {} \;
+find . -type f -not -perm 0644 -exec chmod 0644 {} \;
+find . ! -user www-data -exec chown www-data:www-data {} \;
+chmod +x bin/console
+```
+
+Replace `www-data` with the user that your web server runs as.
+
+### Create the Database
+
+Create an empty MySQL or MariaDB database before running the installer.
+
+After completing these steps, continue with **Section 6 – Installation Steps**.
+
+## 5.3 Option C — Download the Installable Package
 
 Unless you are building a development environment from source, download the pre-built installable package for your target release.
 
