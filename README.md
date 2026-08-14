@@ -126,7 +126,7 @@ RahbarCRM is licensed under RahbarCRM's own license, adapted from the Business S
 
 See [`LICENSE.md`](./LICENSE.md) for the full terms.
 
-![AI Insight and Assistant](images/AI Insight.png)
+![AI Insight and Assistant](images/AI_Insight.png)
 
 ## Support & Contact
 
