@@ -6,11 +6,14 @@ RahbarCRM is a self-hosted CRM re-engineered with AI at its core — built for t
 
 ---
 
+![RahbarCRM Dashboard](images/Activity dashboard.png)
+
 ## Overview
 
 RahbarCRM combines a traditional CRM's core workflow (contacts, accounts, leads, opportunities, activities) with AI-powered features that reduce manual work: intelligent email handling, automated workflows, a knowledge assistant you can reach over WhatsApp, and built-in calendar & scheduling.
 
 Because it's self-hosted, your data stays on infrastructure you control — RahbarCRM doesn't require sending your customer data to a third-party SaaS platform.
+
 
 ## Features
 
@@ -30,6 +33,8 @@ Because it's self-hosted, your data stays on infrastructure you control — Rahb
 | Front-end (build tooling) | Angular CLI, Node.js, yarn *(development only — not required for pre-built installs)* |
 
 See [`install.md`](./install.md) for the full list of required PHP modules and supported browsers.
+
+![Workflow and Statistics](images/Leads.png)
 
 ## Getting Started
 
@@ -120,6 +125,8 @@ RahbarCRM is licensed under RahbarCRM's own license, adapted from the Business S
 - ❌ May not be resold or offered as a hosted service under a different name or brand without written authorization
 
 See [`LICENSE.md`](./LICENSE.md) for the full terms.
+
+![AI Insight and Assistant](images/AI Insight.png)
 
 ## Support & Contact
 
