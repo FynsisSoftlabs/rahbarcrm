@@ -6,7 +6,7 @@ RahbarCRM is a self-hosted CRM re-engineered with AI at its core — built for t
 
 ---
 
-![RahbarCRM Dashboard](images/Activity dashboard.png)
+![RahbarCRM Dashboard](images/Activity.png)
 
 ## Overview
 
