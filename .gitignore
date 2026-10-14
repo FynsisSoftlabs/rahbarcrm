@@ -1,0 +1,4 @@
+/cache/
+/public/legacy/cache/
+/public/legacy/upload/*
+!/public/legacy/upload/index.html
